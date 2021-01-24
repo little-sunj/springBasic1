@@ -1,13 +1,17 @@
 package hello.core.lifecycle;
 
-public class NetworkClient {
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+public class NetworkClient  { //implements InitializingBean, DisposableBean
     
     private String url;
     
     public  NetworkClient() {
         System.out.println("생성자 호출, url = " + url);
-        connect();
-        call("초기화 연결 메시지");
     }
 
     public void setUrl(String url) {
@@ -27,4 +31,29 @@ public class NetworkClient {
     public void  disconnect() {
         System.out.println("close = " + url);
     }
+
+    @PostConstruct //javax : 자바 표준. 스프링 종속이 아니다. 사용을 권장.
+    public void init() throws Exception {
+        System.out.println("NetworkClient.init");
+        connect();
+        call("초기화 연결 메시지");
+    }
+
+    @PreDestroy //javax : 자바 표준. 스프링 종속이 아니다. 사용을 권장.
+    public void close() throws Exception {
+        System.out.println("NetworkClient.close");
+        disconnect();
+    }
+    /*@Override //의존관계 주입이 끝나면 호출하겠다.
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("NetworkClient.afterPropertiesSet");
+        connect();
+        call("초기화 연결 메시지");
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("NetworkClient.destroy");
+        disconnect();
+    }*/
 }

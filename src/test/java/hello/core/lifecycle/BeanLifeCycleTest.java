@@ -18,7 +18,10 @@ public class BeanLifeCycleTest {
 
     @Configuration
     static class LifeCycleConfig {
-        @Bean
+
+        //destroyMethod는 기본값이 {추론}으로 되어있다.
+        //이 기능을 사용하기 싫다면 destroyMethod="" 처럼 빈 공백을 지정하면 된다.
+        @Bean //(initMethod="init", destroyMethod="close")
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
@@ -48,5 +51,7 @@ public class BeanLifeCycleTest {
 * * 객체의 생성과 초기화를 분리하자.
 * 생성자는 필수 정보 (파라미터)를 받고 메모리를 할당해서 객체를 생성하는 책임을 가진다.
 * 반면 초기화는 이렇게 생성된 값들을 활용해 외부 커넥션을 연결하는 등 무거운 동작을 수행한다.
+*
+* *
 *
 * */
